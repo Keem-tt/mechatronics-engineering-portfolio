@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OTO – Automated Whiteboard Cleaner</title>
+    <meta name="description" content="Portfolio site for OTO, an Arduino‑powered modular whiteboard cleaning robot. Built by Kadeem Alexander for his Mechatronics capstone project." />
+    <link rel="stylesheet" href="style.css" />
+    <!-- QRCode library for dynamic QR generation. Loaded from a public CDN so the QR code is always valid on GitHub Pages. -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  </head>
+  <body>
+    <header class="hero">
+      <img src="assets/hero.png" alt="OTO assembled device" class="hero-image fade-in" />
+      <div class="hero-content fade-in">
+        <h1>OTO – Automated Whiteboard Cleaner</h1>
+        <p>An open‑source, low‑cost solution that automates whiteboard cleaning using a modular rack‑and‑pinion drive, Arduino control and 3D‑printed parts.</p>
+      </div>
+      <!-- Canvas where the QR code is drawn at runtime; see script.js -->
+      <canvas id="qr-canvas" width="120" height="120" class="qr-code"></canvas>
+    </header>
+
+    <main>
+      <section class="section fade-in" id="problem">
+        <h2>Problem &amp; Objective</h2>
+        <p>
+          In busy classrooms and collaboration spaces, thoroughly erasing large whiteboards can take up to two minutes. Over a week this lost time adds up to nearly an hour, disrupting instruction and reducing productivity. Instructors often rush the task, leaving ghosted markings that degrade surface quality and readability.
+        </p>
+        <p>
+          <strong>OTO</strong> was designed to solve this by automating the erase process. The goal is a portable device that traverses the board, wipes consistently and quietly, is simple to use, and costs under <em>$150</em> including expansion.
+        </p>
+      </section>
+
+      <section class="section fade-in" id="overview">
+        <h2>Overview &amp; Features</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Low cost</h3>
+            <p>The prototype BOM is about <strong>$136.87</strong>, with modular expansion costing roughly <strong>$3.73 per additional 0.5&nbsp;ft</strong> of travel.</p>
+          </div>
+          <div class="card">
+            <h3>Modular &amp; Scalable</h3>
+            <p>The base prototype covers a <strong>1.5 ft × 0.5 ft</strong> area; the rack‑and‑pinion rail can be extended to boards up to 8 ft wide by adding printed segments.</p>
+          </div>
+          <div class="card">
+            <h3>Simple Interface</h3>
+            <p>A single push‑button starts a cleaning cycle. Built‑in calibration logic homes to dual limit switches and executes <strong>10 sweeps per cycle</strong>.</p>
+          </div>
+          <div class="card">
+            <h3>Quiet &amp; Efficient</h3>
+            <p>Powered by a NEMA 17 stepper with a TMC2209 driver for silent microstepping and current control, OTO operates at less than <strong>60 dB(A)</strong> while producing 2–4 N of eraser force.</p>
+          </div>
+          <div class="card">
+            <h3>Long Runtime</h3>
+            <p>An 11.1 V 2200 mAh Li‑ion battery powers over <strong>30 cleaning cycles</strong> on a single charge. A DC‑DC boost converter supplies 20 V for the motor while isolating logic.</p>
+          </div>
+          <div class="card">
+            <h3>Open &amp; Repairable</h3>
+            <p>All parts are designed in Fusion 360 and 3D‑printed in PLA+. The full CAD, code and report are open‑source so educators and makers can reproduce and iterate on the design.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="architecture">
+        <h2>System Architecture &amp; Components</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Subsystems</h3>
+            <ul>
+              <li><strong>Cleaning Carriage:</strong> Houses the stepper motor, pinion gear, eraser pad and linear bearings for smooth travel.</li>
+              <li><strong>Rack &amp; Pinion Drive:</strong> Modular printed racks and a 16‑tooth printed pinion translate rotation to linear motion.</li>
+              <li><strong>Control:</strong> Arduino Uno with TMC2209 driver via UART; dual normally open limit switches define home/end stops.</li>
+              <li><strong>Power:</strong> 3‑cell Li‑ion battery with boost converter; toggle switch and low‑voltage cutoff for safety.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Key Components</h3>
+            <ul>
+              <li>NEMA 17 stepper (1.8°).</li>
+              <li>TMC2209 driver for quiet, precise motion.</li>
+              <li>Two normally open limit switches for homing.</li>
+              <li>11.1 V 2200 mAh Li‑ion battery (≥30 cycles).</li>
+              <li>8 mm aluminum linear rods with LM8UU bearings.</li>
+              <li>3D‑printed rack segments and pinion gear in PLA+.</li>
+              <li>Foam + felt eraser pad affixed via Velcro.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="performance">
+        <h2>Performance &amp; Requirements</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Cycle time</h3>
+            <p>Each cleaning cycle comprises ten sweeps and completes in under <strong>two minutes</strong>.</p>
+          </div>
+          <div class="card">
+            <h3>Residual ink</h3>
+            <p>After one cycle, less than <strong>5% residual ink</strong> remains on the board.</p>
+          </div>
+          <div class="card">
+            <h3>Pad force</h3>
+            <p>Eraser pad applies between <strong>2–4 N</strong> of normal force for thorough wiping.</p>
+          </div>
+          <div class="card">
+            <h3>Noise &amp; endurance</h3>
+            <p>Operating noise stays below <strong>60 dB(A)</strong> at one meter and the battery lasts for <strong>30+ cycles</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="iteration">
+        <h2>Design Iteration</h2>
+        <p>
+          OTO underwent multiple iterations before reaching the current release:
+        </p>
+        <ul>
+          <li><strong>Visual ideation:</strong> Early CAD focused on motion feasibility but lacked modularity.</li>
+          <li><strong>Beta build:</strong> Introduced 0.5 ft rack segments and snap‑fit joints; validated modular rail concept.</li>
+          <li><strong>Alpha build:</strong> Added power and communication bin and integrated carriage; highlighted issues with weight distribution and eraser glide.</li>
+          <li><strong>Release candidate:</strong> Redesigned racks into three‑part plates, added adjustable Velcro‑mounted pads and optimized cable management.</li>
+        </ul>
+      </section>
+
+      <section class="section fade-in" id="manufacturing">
+        <h2>Manufacturing &amp; Materials</h2>
+        <p>
+          All mechanical parts are fabricated via Fused Deposition Modeling (FDM) using grey PLA+ on an Elegoo Neptune 3 Pro. Prints use 0.2 mm layers, 3 walls, 4 top/bottom layers, 20% grid infill and 50 mm/s speed. Long components are divided into ≤0.5 ft sections and snap‑fit joints are tolerance‑tested in 0.1 mm increments for easy assembly.
+        </p>
+      </section>
+
+      <section class="section fade-in" id="gallery">
+        <h2>Visuals</h2>
+        <p>Selected views of the OTO hardware illustrate its modular construction and careful detailing.</p>
+        <div class="grid">
+          <div class="card">
+            <img src="assets/images/exploded.png" alt="Exploded view – front" style="width:100%; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05);" />
+            <p style="margin-top:0.5rem; font-size:0.9rem; color:#666;">Exploded front view highlighting every printed and purchased component.</p>
+          </div>
+          <div class="card">
+            <img src="assets/images/exploded45.png" alt="Exploded view – angled" style="width:100%; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05);" />
+            <p style="margin-top:0.5rem; font-size:0.9rem; color:#666;">45° exploded perspective showing how the rack, motor, and carriage assemble.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="impact">
+        <h2>Impact</h2>
+        <p>
+          By automating a mundane yet necessary task, OTO returns nearly an hour of instructional time each week per classroom. Consistent erasing extends board life and improves legibility. With a total cost under <strong>$150</strong>, OTO is accessible to underserved schools and DIY makers. The open‑source design encourages learning and community improvements.
+        </p>
+      </section>
+
+      <section class="section fade-in" id="future">
+        <h2>Future Work</h2>
+        <p>
+          Planned improvements include sensorless homing to simplify wiring, enhanced wiping mechanisms for broader coverage, and pre‑wired harness kits with go/no‑go gauges for assembly quality assurance.
+        </p>
+      </section>
+
+      <section class="section fade-in" id="links">
+        <h2>Resources &amp; Links</h2>
+        <ul>
+          <li><a href="https://github.com/Keem-tt/OTO-Whiteboard-Cleaner" target="_blank" rel="noopener">View the project repository on GitHub</a></li>
+          <li><a href="https://keem-tt.github.io/OTO-Whiteboard-Cleaner/Report/Capstone%20Project%20Report.pdf" target="_blank" rel="noopener">Read the full capstone report (PDF)</a></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="fade-in">
+      <p>© <span id="year"></span> Kadeem Alexander • New York City • Mechatronics Engineer</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
